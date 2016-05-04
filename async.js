@@ -3,9 +3,6 @@ var PropTypes = React.PropTypes;
 var thunkMiddleware = ReduxThunk.default;
 
 // ACTIONS
-const FETCH_TODOS_REQUEST = 'FETCH_TODOS_REQUEST';
-const FETCH_TODOS_FAILURE = 'FETCH_TODOS_FAILURE';
-const FETCH_TODOS_SUCCESS = 'FETCH_TODOS_SUCCESS';
 const ADD_TODO = 'ADD_TODO';
 const TOGGLE_TODO = 'TOGGLE_TODO';
 const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER';
@@ -55,26 +52,6 @@ function removeNotification(id) {
 	}
 }
 
-function fetchTodosResponse(json) {
-	if (json.error) {
-		return {
-			type: FETCH_TODOS_FAILURE,
-			error: json.error
-		}
-	} else {
-		return {
-			type: FETCH_TODOS_SUCCESS,
-			todos: json.todos
-		}
-	}
-}
-
-function fetchTodosRequest() {
-	return {
-		type: FETCH_TODOS_REQUEST
-	}
-}
-
 // ACTION CREATORS - ASYNC
 var nextNotificationId = 0;
 function addSelfHidingNotification(text) {
@@ -84,26 +61,6 @@ function addSelfHidingNotification(text) {
 		
 		setTimeout(function() {
 			dispatch(removeNotification(id))
-		}, 5000);
-	}
-}
-
-function fetchTodos() {
-	return function(dispatch) {
-		dispatch(fetchTodosRequest());
-		
-		setTimeout(function() {
-			var json = {
-				todos: [
-					{
-						text: 'from server',
-						completed: false,
-						id: -1
-					}
-				]
-			}
-			
-			dispatch(fetchTodosResponse(json));
 		}, 5000);
 	}
 }
