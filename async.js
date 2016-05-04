@@ -128,9 +128,21 @@ function notifications(state = [], action) {
 		
 		case REMOVE_NOTIFICATION:
 		
-			return state.filter(notification => {
-				return notification.id !== action.id
+			var found = false;
+			var newState = state.filter(notification => {
+				if (notification.id !== action.id) {
+					return true;
+				} else {
+					found = true;
+					return false;
+				}
 			});
+			
+			if (found) {
+				return newState;
+			} else {
+				return state; // dont return undefined. it throws "Error: Given action "REMOVE_NOTIFICATION", reducer "notifications" returned undefined. To ignore an action, you must explicitly return the previous state."
+			}
 		
 		default:
 		
@@ -290,18 +302,21 @@ var AddTodo = function({dispatch}) {
 }
 var AddTodoLink = ReactRedux.connect()(AddTodo);
 
-function Notification({text}) {
+function Notification({text, onCloseClick}) {
 	return React.createElement('div', { style:{padding:20, margin:20, backgroundColor:'rgba(0,0,0,0.1)'} },
-		text
+		text,
+		React.createElement('a', { href:'#', onClick:onCloseClick },
+			'CLOSE'
+		)
 	);
 }
 
 
-function NotificationList({notifications}) {
+function NotificationList({notifications, onCloseClick}) {
 	return React.createElement('div', { style:{position:'absolute',width:'100%'} },
 		notifications.map(function(notification) {
 			console.log('notification:', notification);
-			return React.createElement(Notification, { text:notification.text });
+			return React.createElement(Notification, { text:notification.text, onCloseClick:onCloseClick.bind(null, notification.id) });
 		})
 	)
 }
@@ -310,6 +325,13 @@ var NotificationListDux = ReactRedux.connect(
 	function mapStateToProps(state, ownProps) {
 		return {
 			notifications: state.notifications
+		}
+	},
+	function mapDispatchToProps(dispatch, ownProps) {
+		return {
+			onCloseClick: function(id) {
+				dispatch(removeNotification(id));
+			}
 		}
 	}
 )(NotificationList);
