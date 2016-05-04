@@ -142,15 +142,15 @@ var Footer = function() {
 	return React.createElement('p', {},
 		'Show:',
 		' ',
-		React.createElement(FilterLink, { filter:'SHOW_ALL' },
+		React.createElement(FilterLink, { filter:SHOW_ALL },
 			'All'
 		),
 		', ',
-		React.createElement(FilterLink, { filter:'SHOW_ACTIVE' },
+		React.createElement(FilterLink, { filter:SHOW_ACTIVE },
 			'Active'
 		),
 		', ',
-		React.createElement(FilterLink, { filter:'SHOW_COMPLETED' },
+		React.createElement(FilterLink, { filter:SHOW_COMPLETED },
 			'Completed'
 		)
 	);
@@ -167,11 +167,11 @@ var App = function() {
 // REACT COMPONENTS - CONTAINER
 const getVisibleTodos = function(todos, filter) {
 	switch (filter) {
-		case 'SHOW_ALL':
+		case SHOW_ALL:
 			return todos
-		case 'SHOW_COMPLETED':
+		case SHOW_COMPLETED:
 			return todos.filter(t => t.completed)
-		case 'SHOW_ACTIVE':
+		case SHOW_ACTIVE:
 			return todos.filter(t => !t.completed)
 	}
 }
